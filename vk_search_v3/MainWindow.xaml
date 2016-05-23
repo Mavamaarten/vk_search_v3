@@ -30,7 +30,7 @@
         <Label Foreground="WhiteSmoke" FontFamily="Segoe UI light" FontSize="18" Content="SEARCH" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,32,0,0" Height="43" Width="95" Grid.RowSpan="2"/>
 
         <Image x:Name="loadingIndicator" Visibility="{Binding Path=Loading, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" gif:ImageBehavior.AnimatedSource="Resources/animated_loader.gif"/>
-        
+
         <TextBox Padding="5,0,5,0" BorderBrush="Gray" Foreground="White" Background="Black" FontSize="14" x:Name="txtSearch" Margin="0,18,5,17" VerticalContentAlignment="Center" Grid.Column="1" KeyUp="TxtSearch_OnKeyUp"/>
         <Border Grid.Column="2" Margin="5,18,10,17" BorderThickness="1" BorderBrush="Gray">
             <Button Foreground="White" Content="SEARCH" BorderBrush="{x:Null}" x:Name="btnSearch" FontSize="11" Click="btnSearch_Click">
@@ -80,6 +80,7 @@
                 </StackPanel>
             </ListViewItem>
         </ListView>
+        <ListBox x:Name="lvCustomPlaylists" HorizontalAlignment="Left" Margin="14,150,0,10" Grid.Row="1" Width="171"/>
 
         <Rectangle VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Fill="#444" Height="1" Margin="10,144,10,0"/>
 

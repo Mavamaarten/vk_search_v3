@@ -15,7 +15,7 @@ namespace vk_search_v3.API
         /// <param name="access_token">The access token to authorhize the request</param>
         /// <returns>a list of Track objects</returns>
         [Get("/audio.get")]
-        Task<RestResponse> GetTracks(long audio_ids, APIConstants need_user, int offset, int count, string access_token);
+        Task<RestResponse> GetTracks(long? audio_ids, APIConstants need_user, int offset, int count, string access_token);
 
         /// <summary>
         /// Returns a list of Track objects

@@ -79,9 +79,12 @@
     </ApplicationDefinition>
     <Compile Include="API\APIConstants.cs" />
     <Compile Include="API\APIError.cs" />
+    <Compile Include="API\Exceptions\UnauthorizedException.cs" />
+    <Compile Include="API\Exceptions\UnknownAPIException.cs" />
     <Compile Include="API\IvkAPI.cs" />
     <Compile Include="API\RestResponse.cs" />
     <Compile Include="API\VkAPI.cs" />
+    <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="VkPlayer.cs" />
