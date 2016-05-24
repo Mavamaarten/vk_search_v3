@@ -15,7 +15,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="195"/>
+            <ColumnDefinition Width="213"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
@@ -29,9 +29,9 @@
         <Label Foreground="WhiteSmoke" FontFamily="Segoe UI light" FontSize="28" Content="vk.com" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,1,0,0" Height="43" Width="95"/>
         <Label Foreground="WhiteSmoke" FontFamily="Segoe UI light" FontSize="18" Content="SEARCH" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="14,32,0,0" Height="43" Width="95" Grid.RowSpan="2"/>
 
-        <Image x:Name="loadingIndicator" Visibility="{Binding Path=Loading, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" gif:ImageBehavior.AnimatedSource="Resources/animated_loader.gif"/>
+        <Image x:Name="loadingIndicator" Visibility="{Binding Path=Loading, Converter={StaticResource BoolToVis}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" gif:ImageBehavior.AnimatedSource="Resources/animated_loader.gif" Height="4" Margin="111,0,131,0" Width="288"/>
 
-        <TextBox Padding="5,0,5,0" BorderBrush="Gray" Foreground="White" Background="Black" FontSize="14" x:Name="txtSearch" Margin="0,18,5,17" VerticalContentAlignment="Center" Grid.Column="1" KeyUp="TxtSearch_OnKeyUp"/>
+        <TextBox Padding="3,0,3,1" BorderBrush="Gray" Foreground="White" Background="Black" FontSize="14" x:Name="txtSearch" Margin="0,18,5,17" VerticalContentAlignment="Center" Grid.Column="1" KeyUp="TxtSearch_OnKeyUp"/>
         <Border Grid.Column="2" Margin="5,18,10,17" BorderThickness="1" BorderBrush="Gray">
             <Button Foreground="White" Content="SEARCH" BorderBrush="{x:Null}" x:Name="btnSearch" FontSize="11" Click="btnSearch_Click">
                 <Button.Style>
@@ -59,8 +59,8 @@
             </Button>
         </Border>
 
-        <TextBlock FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" Margin="15,10,0,0" Text="Playlists"/>
-        <ListView SelectionChanged="LvPlaylists_OnSelectionChanged" x:Name="lvPlaylists" Grid.Row="1" Grid.Column="0" Background="Black" BorderBrush="{x:Null}" Margin="10,39,10,0" Height="100" VerticalAlignment="Top">
+        <TextBlock FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" Margin="21,121,0,0" Text="Playlists" Height="21" Width="55"/>
+        <ListView SelectionChanged="LvPlaylists_OnSelectionChanged" x:Name="lvPlaylists" Grid.Row="1" Grid.Column="0" Background="Black" BorderBrush="{x:Null}" Margin="10,10,10,0" Height="103" VerticalAlignment="Top">
             <ListViewItem FontSize="14" Height="32" Foreground="White">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/magnify.png" Width="22" Height="22" Margin="0,0,5,0" />
@@ -80,9 +80,15 @@
                 </StackPanel>
             </ListViewItem>
         </ListView>
-        <ListBox x:Name="lvCustomPlaylists" HorizontalAlignment="Left" Margin="14,150,0,10" Grid.Row="1" Width="171"/>
-
-        <Rectangle VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Fill="#444" Height="1" Margin="10,144,10,0"/>
+        <Rectangle VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Fill="#444" Height="1" Margin="15,147,13,0"/>
+        <ListView SelectionChanged="LvCustomPlaylists_OnSelectionChanged" Background="Black" Foreground="White" BorderBrush="{x:Null}" x:Name="lvCustomPlaylists" Margin="10,150,10,29" Grid.Row="1">
+            <ListView.ItemTemplate >
+                <DataTemplate>
+                    <TextBlock FontSize="14" Padding="4,4,4,4" TextTrimming="CharacterEllipsis" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBlock x:Name="btnAddPlaylist" MouseLeftButtonUp="BtnAddPlaylist_OnMouseLeftButtonUp" Cursor="Hand" FontSize="14" Foreground="Silver" VerticalAlignment="Center" Text="+ Add playlist" Margin="14,303,10,0" Grid.Row="1" Height="24"/>
 
         <Grid Margin="7,0,36,0" Grid.Row="1" Grid.Column="1" ColumnSpan="2" Height="35" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
@@ -99,7 +105,7 @@
             <TextBlock FontSize="16" VerticalAlignment="Center" Grid.Column="4" Text="Duration"/>
         </Grid>
 
-        <ListView BorderThickness="1" BorderBrush="Gray" Background="Black" Name="lvTracks" Margin="0,39,10,0" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
+        <ListView MouseDoubleClick="LvTracks_OnMouseDoubleClick" BorderThickness="1" BorderBrush="Gray" Background="Black" Name="lvTracks" Margin="0,39,10,0" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -130,5 +136,6 @@
         </Border>
         <TextBlock FontSize="13" x:Name="txtNowPlayingTitle" TextWrapping="Wrap" Text="The Lotus Symphony" Grid.Column="1" Margin="73,10,10,0" Grid.Row="2" Height="16" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="txtNowPlayingArtist" TextWrapping="Wrap" Text="Netsky" Grid.Column="1" Margin="73,28,10,0" Grid.Row="2" Height="16" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+
     </Grid>
 </Window>

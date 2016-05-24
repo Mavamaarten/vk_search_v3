@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using vk_search_v3.API;
+using vk_search_v3.Models;
+using vk_search_v3.Playback;
 
 namespace vk_search_v3
 {
@@ -15,11 +17,14 @@ namespace vk_search_v3
         }
 
         private readonly VkAPI vkAPI;
+        private readonly Mp3Player player;
         private PlayerStates playerState;
 
-        public List<Track> searchResultTracks { get; set; }
-        public List<Track> queueTracks { get; set; }
-        public List<Track> favoriteTracks { get; set; }
+        public List<Track> SearchResultTracks { get; set; }
+        public List<Track> QueueTracks { get; set; }
+        public List<Track> FavoriteTracks { get; set; }
+        public List<Playlist> Playlists { get; set; }
+        public Track CurrentTrack { get; set; }
         public PlayerStates PlayerState
         {
             get
@@ -34,15 +39,33 @@ namespace vk_search_v3
         }
 
         public event EventHandler<List<Track>> OnVisibleTracksChanged;
+        public event EventHandler<List<Playlist>> OnPlaylistsChanged;
         public event EventHandler<PlayerStates> OnPlayerStateChanged;
+        public event EventHandler<Track> OnCurrentTrackChanged;
         public event EventHandler<Exception> OnExceptionOccurred;
+        public event EventHandler<Tuple<long, long>> OnPlaybackPositionUpdated;
 
         public VkPlayer(string access_token)
         {
             vkAPI = new VkAPI(VkAPI.BASE_URL, access_token);
-            searchResultTracks = new List<Track>();
-            queueTracks = new List<Track>();
-            favoriteTracks = new List<Track>();
+            player = new Mp3Player();
+            player.OnPlaybackEnded += Player_OnPlaybackEnded;
+            player.OnPlaybackPositionUpdated += PlayerOnPlaybackPositionUpdated;
+
+            SearchResultTracks = new List<Track>();
+            QueueTracks = new List<Track>();
+            FavoriteTracks = new List<Track>();
+            Playlists = new List<Playlist>();
+        }
+
+        private void PlayerOnPlaybackPositionUpdated(object sender, Tuple<long, long> e)
+        {
+            OnPlaybackPositionUpdated?.Invoke(this, e);
+        }
+
+        private void Player_OnPlaybackEnded(object sender, EventArgs e)
+        {
+            //TODO play next track
         }
 
         public async void SearchTracks(string query)
@@ -54,9 +77,9 @@ namespace vk_search_v3
                 PlayerState = PlayerStates.SEARCH_RESULTS;
                 OnPlayerStateChanged?.Invoke(this, PlayerStates.SEARCH_RESULTS);
 
-                searchResultTracks.Clear();
-                searchResultTracks.AddRange(searchedTracks);
-                OnVisibleTracksChanged?.Invoke(this, searchResultTracks);
+                SearchResultTracks.Clear();
+                SearchResultTracks.AddRange(searchedTracks);
+                OnVisibleTracksChanged?.Invoke(this, SearchResultTracks);
             }
             catch (Exception ex)
             {
@@ -70,18 +93,53 @@ namespace vk_search_v3
             switch (state)
             {
                 case PlayerStates.SEARCH_RESULTS:
-                    OnVisibleTracksChanged?.Invoke(this, searchResultTracks);
+                    OnVisibleTracksChanged?.Invoke(this, SearchResultTracks);
                     break;
                 case PlayerStates.FAVORITES:
-                    OnVisibleTracksChanged?.Invoke(this, favoriteTracks);
-                    break;
-                case PlayerStates.PLAYLIST:
-                    OnVisibleTracksChanged?.Invoke(this, null);
+                    OnVisibleTracksChanged?.Invoke(this, FavoriteTracks);
                     break;
                 case PlayerStates.QUEUE:
-                    OnVisibleTracksChanged?.Invoke(this, queueTracks);
+                    OnVisibleTracksChanged?.Invoke(this, QueueTracks);
                     break;
             }
+        }
+
+        public void CreatePlaylist(string playlistName)
+        {
+            Playlists.Add(new Playlist
+            {
+                Name = playlistName,
+                Tracks = new List<Track>()
+            });
+            OnPlaylistsChanged?.Invoke(this, Playlists);
+        }
+
+        public void SelectPlaylist(Playlist playlist)
+        {
+            PlayerState = PlayerStates.PLAYLIST;
+            OnVisibleTracksChanged?.Invoke(this, playlist.Tracks);
+        }
+
+        public void Play()
+        {
+            
+        }
+
+        public void PlayTrack(Track track)
+        {
+            track.playing = true;
+            CurrentTrack = track;
+            player.PlayUrl(track.url);
+        }
+
+        public void Pause()
+        {
+            
+        }
+
+        public void Next()
+        {
+            
         }
     }
 }

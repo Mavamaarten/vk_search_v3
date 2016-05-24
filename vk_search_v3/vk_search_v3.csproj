@@ -39,6 +39,9 @@
     <ApplicationIcon>Resources\vk logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bass.Net">
+      <HintPath>..\..\..\Desktop\Bass.Net.dll</HintPath>
+    </Reference>
     <Reference Include="FirstFloor.ModernUI, Version=1.0.9.0, Culture=neutral, PublicKeyToken=bc9b0c37bf06c6a9, processorArchitecture=MSIL">
       <HintPath>..\packages\ModernUI.WPF.1.0.9\lib\net45\FirstFloor.ModernUI.dll</HintPath>
       <Private>True</Private>
@@ -86,6 +89,7 @@
     <Compile Include="API\VkAPI.cs" />
     <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="Playback\Mp3Player.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="VkPlayer.cs" />
     <Page Include="MainWindow.xaml">

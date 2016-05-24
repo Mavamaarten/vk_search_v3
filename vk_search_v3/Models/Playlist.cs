@@ -7,5 +7,10 @@ namespace vk_search_v3.Models
         public long Id { get; set; }
         public List<Track> Tracks { get; set; }
         public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
