@@ -112,6 +112,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\BitrateChecker.cs" />
     <Compile Include="Util\FormatUtil.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="Windows\LoginWindow.xaml.cs">

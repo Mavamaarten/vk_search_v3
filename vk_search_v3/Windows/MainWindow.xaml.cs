@@ -128,8 +128,10 @@ namespace vk_search_v3
 
         private void Player_OnVisibleTracksChanged(object sender, List<Track> tracks)
         {
-            ViewModel.Tracks.Clear();
-            tracks.ForEach(t => ViewModel.Tracks.Add(t));
+            Application.Current.Dispatcher.Invoke(delegate {
+                ViewModel.Tracks.Clear();
+                tracks.ForEach(t => ViewModel.Tracks.Add(t));
+            });
         }
 
         private void Player_OnPlaybackPositionUpdated(object sender, Tuple<long, long> e)
