@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json.Linq;
 using Refit;
 using vk_search_v3.API.Exceptions;
+using vk_search_v3.Model;
 
 namespace vk_search_v3.API
 {
@@ -93,7 +93,6 @@ namespace vk_search_v3.API
         {
             track.artist = HttpUtility.HtmlDecode(track.artist).Trim();
             track.title = HttpUtility.HtmlDecode(track.title).Trim();
-            track.playing = true;
             return track;
         }
 

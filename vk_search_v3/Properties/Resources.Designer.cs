@@ -71,6 +71,47 @@ namespace vk_search_v3.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to html, body {
+        ///  margin: 0px;
+        ///  padding: 0px;
+        ///  font-family: tahoma, arial, verdana, sans-serif, Lucida Sans;
+        ///  font-size: 11px;
+        ///  text-align: center;
+        ///  height: 100%;
+        ///}
+        ///body {
+        ///  background: #000000;
+        ///}
+        ///.container {
+        ///  width: 100%;
+        ///  height: 100%;
+        ///}
+        ///.head {
+        ///  width: 100%;
+        ///  vertical-align: top;
+        ///  border: none;
+        ///  color: #FFFFFF;
+        ///  background: #000000;
+        ///  font-weight: bold;
+        ///  padding: 17px 20px 18px;
+        ///  font-size: 1.09em;
+        ///  height: 24px;
+        ///}
+        ///
+        ///b {
+        ///  color: #36638E;
+        ///}
+        ///
+        ///.logo {
+        ///  position: [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string login_style {
+            get {
+                return ResourceManager.GetString("login_style", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap magnify {
@@ -86,6 +127,26 @@ namespace vk_search_v3.Properties {
         internal static System.Drawing.Bitmap play {
             get {
                 object obj = ResourceManager.GetObject("play", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap skip_next {
+            get {
+                object obj = ResourceManager.GetObject("skip_next", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap skip_previous {
+            get {
+                object obj = ResourceManager.GetObject("skip_previous", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,6 +1,6 @@
-using System;
+using vk_search_v3.Util;
 
-namespace vk_search_v3
+namespace vk_search_v3.Model
 {
     public class Track
     {
@@ -16,17 +16,6 @@ namespace vk_search_v3
         public long album_id { get; set; }
         public long lyrics_id { get; set; }
         public long genre_id { get; set; }
-
-        public string DurationString
-        {
-            get
-            {
-                var timespan = new TimeSpan(0, 0, duration);
-                if (timespan.Hours > 0)
-                    return timespan.ToString("g");
-                else
-                    return timespan.ToString("mm\\:ss");
-            }
-        }
+        public string DurationString => FormatUtil.secondsToShortTimespan(duration);
     }
 }
