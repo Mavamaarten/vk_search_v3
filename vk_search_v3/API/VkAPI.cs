@@ -14,9 +14,15 @@ namespace vk_search_v3.API
         public static readonly string BASE_URL = "https://api.vk.com/method";
 
         public string BaseUrl { get; private set; }
-        public string AccessToken { get; }
+        public string AccessToken { get; set; }
 
         private readonly IvkAPI api;
+
+        public VkAPI()
+        {
+            BaseUrl = BASE_URL;
+            api = RestService.For<IvkAPI>(BASE_URL);
+        }
 
         public VkAPI(string baseUrl, string accessToken)
         {

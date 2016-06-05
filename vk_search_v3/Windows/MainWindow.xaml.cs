@@ -1,23 +1,17 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using vk_search_v3.Annotations;
 using vk_search_v3.Model;
-using vk_search_v3.Playback;
-using vk_search_v3.Util;
 using vk_search_v3.ViewModel;
-using vk_search_v3.Windows;
 
-namespace vk_search_v3
+namespace vk_search_v3.Windows
 {
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private readonly VkPlayer player;
-
         private MainWindowViewModel viewModel;
         public MainWindowViewModel ViewModel
         {
@@ -29,24 +23,33 @@ namespace vk_search_v3
             }
         }
 
+        private DownloadsWindowViewModel downloadsWindowViewModel = new DownloadsWindowViewModel();
+        public DownloadsWindowViewModel DownloadsWindowViewModel
+        {
+            get { return downloadsWindowViewModel; }
+            set
+            {
+                if (Equals(value, downloadsWindowViewModel)) return;
+                downloadsWindowViewModel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DownloadWindow downloadWindow;
+
         public MainWindow()
         {
             InitializeComponent();
 
             ViewModel = new MainWindowViewModel();
+            ViewModel.OnExceptionOccurred += PlayerOnOnExceptionOccurred;
+            ViewModel.OnPlaybackSourceChanged += ViewModel_OnPlaybackSourceChanged;
             DataContext = ViewModel;
 
             LoginWindow loginWindow = new LoginWindow();
             if (loginWindow.ShowDialog() == true)
             {
-                player = new VkPlayer(loginWindow.AccessToken);
-                player.OnLoadingChanged += Player_OnLoadingChanged;
-                player.OnVisibleTracksChanged += Player_OnVisibleTracksChanged;
-                player.OnPlaylistsChanged += Player_OnPlaylistsChanged;
-                player.OnPlaybackSourceChanged += PlayerOnPlaybackSourceChanged;
-                player.OnPlaybackPositionUpdated += Player_OnPlaybackPositionUpdated;
-                player.OnCurrentTrackChanged += Player_OnCurrentTrackChanged;
-                player.OnExceptionOccurred += PlayerOnOnExceptionOccurred;
+                ViewModel.SetAccessToken(loginWindow.AccessToken);
             }
             else
             {
@@ -54,9 +57,31 @@ namespace vk_search_v3
             }
         }
 
+        private void ViewModel_OnPlaybackSourceChanged(object sender, MainWindowViewModel.PlaybackSources playbackSource)
+        {
+            switch (playbackSource)
+            {
+                case MainWindowViewModel.PlaybackSources.SEARCH_RESULTS:
+                    lvPlaylists.SelectedIndex = 0;
+                    lvCustomPlaylists.SelectedIndex = -1;
+                    break;
+                case MainWindowViewModel.PlaybackSources.FAVORITES:
+                    lvPlaylists.SelectedIndex = 1;
+                    lvCustomPlaylists.SelectedIndex = -1;
+                    break;
+                case MainWindowViewModel.PlaybackSources.PLAYLIST:
+                    lvPlaylists.SelectedIndex = -1;
+                    break;
+                case MainWindowViewModel.PlaybackSources.QUEUE:
+                    lvPlaylists.SelectedIndex = 2;
+                    lvCustomPlaylists.SelectedIndex = -1;
+                    break;
+            }
+        }
+
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            player.SearchTracks(txtSearch.Text);
+            ViewModel.SearchTracks(txtSearch.Text);
         }
 
         private void TxtSearch_OnKeyUp(object sender, KeyEventArgs e)
@@ -69,85 +94,26 @@ namespace vk_search_v3
             switch (lvPlaylists.SelectedIndex)
             {
                 case 0:
-                    player.PlaybackSource = VkPlayer.PlaybackSources.SEARCH_RESULTS;
+                    ViewModel.PlaybackSource = MainWindowViewModel.PlaybackSources.SEARCH_RESULTS;
                     break;
                 case 1:
-                    player.PlaybackSource = VkPlayer.PlaybackSources.FAVORITES;
+                    ViewModel.PlaybackSource = MainWindowViewModel.PlaybackSources.FAVORITES;
                     break;
                 case 2:
-                    player.PlaybackSource = VkPlayer.PlaybackSources.QUEUE;
+                    ViewModel.PlaybackSource = MainWindowViewModel.PlaybackSources.QUEUE;
                     break;
             }
         }
 
         private void BtnAddPlaylist_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            player.CreatePlaylist("Swaglord");
+            ViewModel.CreatePlaylist("Swaglord");
         }
 
         private void LvCustomPlaylists_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
-            player.SelectPlaylist((Playlist) e.AddedItems[0]);
-        }
-
-        #region Player events
-
-        private void Player_OnLoadingChanged(object sender, bool loading)
-        {
-            ViewModel.Loading = loading;
-        }
-
-        private void PlayerOnPlaybackSourceChanged(object sender, VkPlayer.PlaybackSources state)
-        {
-            switch (state)
-            {
-                case VkPlayer.PlaybackSources.SEARCH_RESULTS:
-                    lvPlaylists.SelectedIndex = 0;
-                    lvCustomPlaylists.SelectedIndex = -1;
-                    break;
-                case VkPlayer.PlaybackSources.FAVORITES:
-                    lvPlaylists.SelectedIndex = 1;
-                    lvCustomPlaylists.SelectedIndex = -1;
-                    break;
-                case VkPlayer.PlaybackSources.PLAYLIST:
-                    lvPlaylists.SelectedIndex = -1;
-                    break;
-                case VkPlayer.PlaybackSources.QUEUE:
-                    lvPlaylists.SelectedIndex = 2;
-                    lvCustomPlaylists.SelectedIndex = -1;
-                    break;
-            }
-        }
-
-        private void Player_OnPlaylistsChanged(object sender, List<Playlist> playlists)
-        {
-            lvCustomPlaylists.ItemsSource = playlists;
-            lvCustomPlaylists.Items.Refresh();
-        }
-
-        private void Player_OnVisibleTracksChanged(object sender, List<Track> tracks)
-        {
-            Application.Current.Dispatcher.Invoke(delegate {
-                ViewModel.Tracks.Clear();
-                tracks.ForEach(t => ViewModel.Tracks.Add(t));
-            });
-        }
-
-        private void Player_OnPlaybackPositionUpdated(object sender, Tuple<long, long> e)
-        {
-            ViewModel.ElapsedTime = FormatUtil.secondsToShortTimespan((int) e.Item1);
-            ViewModel.RemainingTime = "-" + FormatUtil.secondsToShortTimespan((int) e.Item2);
-
-            ViewModel.CurrentTrackPosition = e.Item1;
-        }
-
-        private void Player_OnCurrentTrackChanged(object sender, Track track)
-        {
-            ViewModel.CurrentTrackArtist = track.artist;
-            ViewModel.CurrentTrackTitle = track.title;
-            ViewModel.CurrentTrackPosition = 0;
-            ViewModel.CurrentTrackLength = track.duration;
+            ViewModel.SelectPlaylist((Playlist) e.AddedItems[0]);
         }
 
         private void PlayerOnOnExceptionOccurred(object sender, Exception exception)
@@ -155,13 +121,87 @@ namespace vk_search_v3
             MessageBox.Show(exception.Message, "An error occurred...", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        #endregion
-
         private void LvTracks_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectedTrack = (Track) lvTracks.SelectedItem;
             if (selectedTrack == null) return;
-            player.PlayTrack(selectedTrack, player.PlaybackSource != VkPlayer.PlaybackSources.QUEUE);
+            ViewModel.PlayTrack(selectedTrack, ViewModel.PlaybackSource != MainWindowViewModel.PlaybackSources.QUEUE);
+        }
+
+        private void BtnNext_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Next();
+        }
+
+        private void PlayNextCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var selectedTrack = (Track)lvTracks.SelectedItem;
+            if (selectedTrack == null) return;
+            ViewModel.PlayNext(selectedTrack);
+        }
+
+        private void AddToQueueCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var selectedTrack = (Track)lvTracks.SelectedItem;
+            if (selectedTrack == null) return;
+            ViewModel.AddToQueue(selectedTrack);
+        }
+
+        private void AddToPlaylistCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            
+        }
+
+        private void DownloadCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var selectedTrack = (Track)lvTracks.SelectedItem;
+            if (selectedTrack == null) return;
+
+            DownloadsWindowViewModel.Tracks.Add(selectedTrack);
+            if (downloadWindow == null)
+            {
+                downloadWindow = new DownloadWindow(downloadsWindowViewModel);
+            }
+            downloadWindow.Show();
+        }
+
+        private void BtnFavorite_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void BtnPlayPause_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel.PlayPause();
+        }
+
+        private void BtnPrevious_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Previous();
+        }
+
+        private void LvTracks_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var listView = sender as ListView;
+            if (listView != null)
+            {
+                var gridView = listView.View as GridView;
+                var workingWidth = listView.ActualWidth - SystemParameters.VerticalScrollBarWidth - 12;
+                const double col1 = 0.07;
+                const double col2 = 0.27;
+                const double col3 = 0.42;
+                const double col4 = 0.12;
+                const double col5 = 0.12;
+
+                if (gridView != null)
+                {
+                    gridView.Columns[0].Width = workingWidth * col1;
+                    gridView.Columns[1].Width = workingWidth * col2;
+                    gridView.Columns[2].Width = workingWidth * col3;
+                    gridView.Columns[3].Width = workingWidth * col4;
+                    gridView.Columns[4].Width = workingWidth * col5;
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -170,50 +210,6 @@ namespace vk_search_v3
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void BtnNext_OnClick(object sender, RoutedEventArgs e)
-        {
-            player.Next();
-        }
-
-        private void PlayNextCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            var selectedTrack = (Track)lvTracks.SelectedItem;
-            if (selectedTrack == null) return;
-            player.PlayNext(selectedTrack);
-        }
-
-        private void AddToQueueCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            var selectedTrack = (Track)lvTracks.SelectedItem;
-            if (selectedTrack == null) return;
-            player.AddToQueue(selectedTrack);
-        }
-
-        private void AddToPlaylistCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void DownloadCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void BtnFavorite_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void BtnPlayPause_OnClick(object sender, RoutedEventArgs e)
-        {
-            player.PlayPause();
-        }
-
-        private void BtnPrevious_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }

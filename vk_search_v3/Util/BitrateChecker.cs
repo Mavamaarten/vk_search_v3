@@ -26,7 +26,7 @@ namespace vk_search_v3.Util
 
                 return validBitrates
                     .Concat(new[] { bitrate })
-                    .First(validSize => Math.Abs(validSize - bitrate) < 16);
+                    .First(validSize => Math.Abs(validSize - bitrate) < 10);
             }
             catch (Exception)
             {

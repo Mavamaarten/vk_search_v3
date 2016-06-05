@@ -6,7 +6,7 @@ using Timer = System.Timers.Timer;
 
 namespace vk_search_v3.Playback
 {
-    class Mp3Player
+    public class Mp3Player
     {
         private int streamHandle;
         private bool playbackStarting;
