@@ -1,11 +1,9 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using vk_search_v3.Annotations;
+using vk_search_v3.Base;
 using vk_search_v3.Util;
 
 namespace vk_search_v3.Model
 {
-    public class Track : INotifyPropertyChanged
+    public class Track : PropertyChangedNotifying
     {
         private long _id;
         private long _aid;
@@ -19,9 +17,6 @@ namespace vk_search_v3.Model
         private long _albumId;
         private long _lyricsId;
         private long _genreId;
-        private int _downloadProgress;
-        private bool _downloading;
-        private bool _downloadCompleted;
 
         public long Id
         {
@@ -156,46 +151,6 @@ namespace vk_search_v3.Model
             }
         }
 
-        public int DownloadProgress
-        {
-            get { return _downloadProgress; }
-            set
-            {
-                if (value == _downloadProgress) return;
-                _downloadProgress = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool Downloading
-        {
-            get { return _downloading; }
-            set
-            {
-                if (value == _downloading) return;
-                _downloading = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool DownloadCompleted
-        {
-            get { return _downloadCompleted; }
-            set
-            {
-                if (value == _downloadCompleted) return;
-                _downloadCompleted = value;
-                OnPropertyChanged();
-            }
-        }
-
         public string DurationString => FormatUtil.secondsToShortTimespan(duration);
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

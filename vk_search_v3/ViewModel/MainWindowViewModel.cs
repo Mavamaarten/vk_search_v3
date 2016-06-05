@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading;
-using vk_search_v3.Annotations;
 using vk_search_v3.API;
+using vk_search_v3.Base;
 using vk_search_v3.Model;
 using vk_search_v3.Playback;
 using vk_search_v3.Util;
 
 namespace vk_search_v3.ViewModel
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : PropertyChangedNotifying
     {
         public enum PlaybackSources
         {
@@ -371,14 +369,6 @@ namespace vk_search_v3.ViewModel
         public void AddToQueue(Track track)
         {
             Queue.Tracks.Add(track);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

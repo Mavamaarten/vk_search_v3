@@ -158,7 +158,7 @@ namespace vk_search_v3.Windows
             if (selectedTrack == null) return;
 
             DownloadsWindowViewModel.Tracks.Add(selectedTrack);
-            if (downloadWindow == null)
+            if (downloadWindow == null || !downloadWindow.IsLoaded)
             {
                 downloadWindow = new DownloadWindow(downloadsWindowViewModel);
             }

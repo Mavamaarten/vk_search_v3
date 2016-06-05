@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:vk_search_v3.ViewModel"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:commands="clr-namespace:vk_search_v3.Commands"
         mc:Ignorable="d"
         Title="Downloads" Height="364" Width="584"
         Background="Black">
@@ -16,27 +18,27 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
 
-    <ListView ItemContainerStyle="{DynamicResource MetroListviewItemStyle}" ItemsSource="{Binding Tracks}" x:Name="lvDownloadQueue" Background="Black" Foreground="White" BorderBrush="{x:Null}" Margin="0">
+    <ListView ItemContainerStyle="{DynamicResource MetroListviewItemStyle}" ItemsSource="{Binding DownloadThreads}" x:Name="lvDownloadQueue" Background="Black" Foreground="White" BorderBrush="{x:Null}" Margin="0">
         <ListView.View>
             <GridView ColumnHeaderContainerStyle="{DynamicResource MetroListviewColumnHeader}">
                 <GridViewColumn Header="" Width="30">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Image Visibility="{Binding Path=Downloading, Converter={StaticResource BoolToVis}}" Source="/Resources/download.png" Stretch="Uniform" Width="12" Height="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <Image Visibility="{Binding Path=DownloadCompleted, Converter={StaticResource BoolToVis}}" Source="/Resources/check.png" Stretch="Uniform" Width="12" Height="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image Visibility="{Binding Path=Downloading, Converter={StaticResource BoolToVis}}" gif:ImageBehavior.AnimatedSource="/Resources/downloading.gif" Stretch="Uniform" Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image Visibility="{Binding Path=Completed, Converter={StaticResource BoolToVis}}" Source="/Resources/check.png" Stretch="Uniform" Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-                <GridViewColumn Header="Artist" Width="120" DisplayMemberBinding="{Binding artist}" />
-                <GridViewColumn Header="Title" Width="200" DisplayMemberBinding="{Binding title}" />
-                <GridViewColumn Header="Progress" Width="100">
+                <GridViewColumn Header="Artist" Width="120" DisplayMemberBinding="{Binding Track.artist}" />
+                <GridViewColumn Header="Title" Width="200" DisplayMemberBinding="{Binding Track.title}" />
+                <GridViewColumn Header="Progress" Width="200">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <ProgressBar VerticalAlignment="Center" Background="Black" Foreground="White" Height="15" HorizontalAlignment="Right" Maximum="100" Width="100" Value="{Binding DownloadProgress}"/>
-                                <TextBlock FontSize="14" Padding="4,4,4,4" TextTrimming="CharacterEllipsis" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding DownloadProgress}">
+                                <ProgressBar VerticalAlignment="Center" Background="Black" Foreground="White" Height="15" HorizontalAlignment="Center" Maximum="100" Width="175" Value="{Binding DownloadProgress}"/>
+                                <TextBlock FontSize="14" Padding="4,4,4,4" TextTrimming="CharacterEllipsis" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StatusText}">
                                     <TextBlock.Effect>
                                         <DropShadowEffect ShadowDepth="0" Opacity="1" BlurRadius="3" Color="Black"/>
                                     </TextBlock.Effect>

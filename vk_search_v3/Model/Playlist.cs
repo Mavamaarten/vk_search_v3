@@ -1,11 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using vk_search_v3.Annotations;
+using vk_search_v3.Base;
 
 namespace vk_search_v3.Model
 {
-    public class Playlist : INotifyPropertyChanged
+    public class Playlist : PropertyChangedNotifying
     {
         private long _id;
         private ObservableCollection<Track> _tracks;
@@ -51,14 +49,6 @@ namespace vk_search_v3.Model
         public override string ToString()
         {
             return Name;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

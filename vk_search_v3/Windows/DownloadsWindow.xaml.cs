@@ -1,8 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using vk_search_v3.Annotations;
-using vk_search_v3.Downloading;
 using vk_search_v3.ViewModel;
 
 namespace vk_search_v3.Windows
@@ -21,14 +19,11 @@ namespace vk_search_v3.Windows
             }
         }
 
-        private TrackDownloader trackDownloader;
-
         public DownloadWindow(DownloadsWindowViewModel viewModel)
         {
             InitializeComponent();
             ViewModel = viewModel;
-            DataContext = viewModel;
-            trackDownloader = new TrackDownloader(viewModel.Tracks);
+            DataContext = ViewModel;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

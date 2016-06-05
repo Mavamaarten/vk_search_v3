@@ -91,6 +91,16 @@ namespace vk_search_v3.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap downloading {
+            get {
+                object obj = ResourceManager.GetObject("downloading", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to html, body {
         ///  margin: 0px;
         ///  padding: 0px;
