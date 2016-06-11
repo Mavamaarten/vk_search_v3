@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Threading;
 using vk_search_v3.API;
+using vk_search_v3.API.Bing;
 using vk_search_v3.Base;
 using vk_search_v3.Model;
 using vk_search_v3.Playback;
@@ -21,33 +22,35 @@ namespace vk_search_v3.ViewModel
 
         private readonly VkAPI vkAPI;
         private readonly Mp3Player player;
-        private PlaybackSources _playbackSource;
-        private Track _currentTrack;
-        private Playlist _currentlyVisiblePlaylist;
-        private ObservableCollection<Playlist> _playlists;
-        private Tuple<long, long> _playbackPosition;
-        private Mp3Player.PlaybackStates _playbackState;
+        private PlaybackSources playbackSource;
+        private Track currentTrack;
+        private Playlist currentlyVisiblePlaylist;
+        private ObservableCollection<Playlist> playlists;
+        private Tuple<long, long> playbackPosition;
+        private Mp3Player.PlaybackStates playbackState;
         private bool _isLoading;
-        private string _elapsedTimeString;
-        private string _remainingTimeString;
+        private string elapsedTimeString;
+        private string remainingTimeString;
+        private IAlbumArtProvider albumArtProvider;
+        private string _currentTrackAlbumImage;
 
         public Track CurrentTrack
         {
-            get { return _currentTrack; }
+            get { return currentTrack; }
             set
             {
-                if (Equals(value, _currentTrack)) return;
-                _currentTrack = value;
+                if (Equals(value, currentTrack)) return;
+                currentTrack = value;
                 OnPropertyChanged();
             }
         }
         public Playlist CurrentlyVisiblePlaylist
         {
-            get { return _currentlyVisiblePlaylist; }
+            get { return currentlyVisiblePlaylist; }
             set
             {
-                if (Equals(value, _currentlyVisiblePlaylist)) return;
-                _currentlyVisiblePlaylist = value;
+                if (Equals(value, currentlyVisiblePlaylist)) return;
+                currentlyVisiblePlaylist = value;
                 OnPropertyChanged();
             }
         }
@@ -57,11 +60,11 @@ namespace vk_search_v3.ViewModel
         public Playlist Favorites { get; set; }
         public ObservableCollection<Playlist> Playlists
         {
-            get { return _playlists; }
+            get { return playlists; }
             set
             {
-                if (Equals(value, _playlists)) return;
-                _playlists = value;
+                if (Equals(value, playlists)) return;
+                playlists = value;
                 OnPropertyChanged();
             }
         }
@@ -69,11 +72,11 @@ namespace vk_search_v3.ViewModel
         {
             get
             {
-                return _playbackSource;
+                return playbackSource;
             }
             set
             {
-                _playbackSource = value;
+                playbackSource = value;
                 SetCurrentlyVisiblePlaylist(value);
                 OnPlaybackSourceChanged?.Invoke(this, value);
                 OnPropertyChanged();
@@ -81,21 +84,21 @@ namespace vk_search_v3.ViewModel
         }
         public Mp3Player.PlaybackStates PlaybackState
         {
-            get { return _playbackState; }
+            get { return playbackState; }
             set
             {
-                if (value == _playbackState) return;
-                _playbackState = value;
+                if (value == playbackState) return;
+                playbackState = value;
                 OnPropertyChanged();
             }
         }
         public Tuple<long, long> PlaybackPosition
         {
-            get { return _playbackPosition; }
+            get { return playbackPosition; }
             set
             {
-                if (Equals(value, _playbackPosition)) return;
-                _playbackPosition = value;
+                if (Equals(value, playbackPosition)) return;
+                playbackPosition = value;
                 OnPropertyChanged();
             }
         }
@@ -111,21 +114,31 @@ namespace vk_search_v3.ViewModel
         }
         public string ElapsedTimeString
         {
-            get { return _elapsedTimeString; }
+            get { return elapsedTimeString; }
             set
             {
-                if (value == _elapsedTimeString) return;
-                _elapsedTimeString = value;
+                if (value == elapsedTimeString) return;
+                elapsedTimeString = value;
                 OnPropertyChanged();
             }
         }
         public string RemainingTimeString
         {
-            get { return _remainingTimeString; }
+            get { return remainingTimeString; }
             set
             {
-                if (value == _remainingTimeString) return;
-                _remainingTimeString = value;
+                if (value == remainingTimeString) return;
+                remainingTimeString = value;
+                OnPropertyChanged();
+            }
+        }
+        public string CurrentTrackAlbumImage
+        {
+            get { return _currentTrackAlbumImage; }
+            set
+            {
+                if (value == _currentTrackAlbumImage) return;
+                _currentTrackAlbumImage = value;
                 OnPropertyChanged();
             }
         }
@@ -136,6 +149,7 @@ namespace vk_search_v3.ViewModel
         public MainWindowViewModel()
         {
             vkAPI = new VkAPI();
+            albumArtProvider = new BingAlbumArtProvider();
             player = new Mp3Player();
             player.OnPlaybackEnded += Player_OnPlaybackEnded;
             player.OnPlaybackStateChanged += Player_OnPlaybackStateChanged;
@@ -285,7 +299,7 @@ namespace vk_search_v3.ViewModel
         /// </summary>
         /// <param name="track">The track to be played</param>
         /// <param name="setQueue">If true, clears the queue and fills it up with the tracks that are currently visible</param>
-        public void PlayTrack(Track track, bool setQueue = true)
+        public async void PlayTrack(Track track, bool setQueue = true)
         {
             IsLoading = true;
 
@@ -322,7 +336,7 @@ namespace vk_search_v3.ViewModel
             }
 
             player.PlayUrl(track.url);
-
+            CurrentTrackAlbumImage = await albumArtProvider.GetAlbumArtUrl(track.artist + " - " + track.title);
             IsLoading = false;
         }
 

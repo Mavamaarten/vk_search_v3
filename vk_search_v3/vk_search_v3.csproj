@@ -100,8 +100,10 @@
     </ApplicationDefinition>
     <Compile Include="API\APIConstants.cs" />
     <Compile Include="API\APIError.cs" />
+    <Compile Include="API\Bing\BingAlbumArtProvider.cs" />
     <Compile Include="API\Exceptions\UnauthorizedException.cs" />
     <Compile Include="API\Exceptions\UnknownAPIException.cs" />
+    <Compile Include="API\IAlbumArtProvider.cs" />
     <Compile Include="API\IvkAPI.cs" />
     <Compile Include="API\RestResponse.cs" />
     <Compile Include="API\VkAPI.cs" />

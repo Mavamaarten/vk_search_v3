@@ -38,7 +38,7 @@
                         <DataTemplate>
                             <Grid>
                                 <ProgressBar VerticalAlignment="Center" Background="Black" Foreground="White" Height="15" HorizontalAlignment="Center" Maximum="100" Width="175" Value="{Binding DownloadProgress}"/>
-                                <TextBlock FontSize="14" Padding="4,4,4,4" TextTrimming="CharacterEllipsis" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StatusText}">
+                                <TextBlock FontSize="12" Padding="4,4,4,4" TextTrimming="CharacterEllipsis" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding StatusText}">
                                     <TextBlock.Effect>
                                         <DropShadowEffect ShadowDepth="0" Opacity="1" BlurRadius="3" Color="Black"/>
                                     </TextBlock.Effect>
