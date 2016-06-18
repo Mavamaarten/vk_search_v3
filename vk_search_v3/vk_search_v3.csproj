@@ -118,8 +118,12 @@
     <Compile Include="Base\PropertyChangedNotifying.cs" />
     <Compile Include="ValueConverter\DurationValueConverter.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\SelectPlaylistWindowViewModel.cs" />
     <Compile Include="Windows\PlaylistNameWindow.xaml.cs">
       <DependentUpon>PlaylistNameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SelectPlaylistWindow.xaml.cs">
+      <DependentUpon>SelectPlaylistWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Windows\DownloadsWindow.xaml">
       <SubType>Designer</SubType>
@@ -150,6 +154,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Windows\PlaylistNameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SelectPlaylistWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

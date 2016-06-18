@@ -46,7 +46,7 @@ namespace vk_search_v3.Windows
             ViewModel.OnPlaybackSourceChanged += ViewModel_OnPlaybackSourceChanged;
             DataContext = ViewModel;
 
-            LoginWindow loginWindow = new LoginWindow();
+            var loginWindow = new LoginWindow();
             if (loginWindow.ShowDialog() == true)
             {
                 ViewModel.SetAccessToken(loginWindow.AccessToken);
@@ -107,7 +107,7 @@ namespace vk_search_v3.Windows
 
         private void BtnAddPlaylist_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var playlistNameWindow = new PlaylistNameWindow();
+            var playlistNameWindow = new PlaylistNameWindow {Owner = this};
             if (playlistNameWindow.ShowDialog() == true)
             {
                 ViewModel.CreatePlaylist(playlistNameWindow.PlaylistName);
@@ -153,7 +153,15 @@ namespace vk_search_v3.Windows
 
         private void AddToPlaylistCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            
+            var selectedTrack = (Track)lvTracks.SelectedItem;
+            if (selectedTrack == null) return;
+
+            var selectPlaylistDialog = new SelectPlaylistWindow(viewModel.Playlists) {Owner = this};
+            if (selectPlaylistDialog.ShowDialog() == true)
+            {
+                var playlist = selectPlaylistDialog.SelectedPlaylist;
+                playlist.Tracks.Add(selectedTrack);
+            }
         }
 
         private void DownloadCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -215,5 +223,6 @@ namespace vk_search_v3.Windows
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }
