@@ -11,6 +11,8 @@ namespace vk_search_v3.Playback
         private int streamHandle;
         private bool playbackStarting;
         private readonly Timer tmrUpdatePosition;
+        private readonly SYNCPROC playbackStopped;
+        private readonly SYNCPROC playbackStalled;
 
         public event EventHandler OnPlaybackEnded;
         public event EventHandler<Exception> OnException;
@@ -38,6 +40,9 @@ namespace vk_search_v3.Playback
             {
                 OnException?.Invoke(this, new Exception("Failed to initialize audio device."));
             }
+
+            playbackStopped = OnPlaybackStopped;
+            playbackStalled = OnPlaybackStalled;
         }
 
         private void TmrUpdatePosition_Elapsed(object sender, ElapsedEventArgs e)
@@ -68,8 +73,8 @@ namespace vk_search_v3.Playback
                     return;
                 }
 
-                Bass.BASS_ChannelSetSync(streamHandle, BASSSync.BASS_SYNC_END, 1, OnPlaybackStopped, IntPtr.Zero);
-                Bass.BASS_ChannelSetSync(streamHandle, BASSSync.BASS_SYNC_STALL, 1, OnPlaybackStalled, IntPtr.Zero);
+                Bass.BASS_ChannelSetSync(streamHandle, BASSSync.BASS_SYNC_END, 1, playbackStopped, IntPtr.Zero);
+                Bass.BASS_ChannelSetSync(streamHandle, BASSSync.BASS_SYNC_STALL, 1, playbackStalled, IntPtr.Zero);
                 Bass.BASS_ChannelPlay(streamHandle, false);
                 tmrUpdatePosition.Start();
 

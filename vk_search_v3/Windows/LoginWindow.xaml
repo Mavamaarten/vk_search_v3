@@ -6,5 +6,5 @@
         mc:Ignorable="d"
         Title="Logging in..." Height="424.043" Width="631.6"
         WindowStartupLocation="CenterOwner">
-    <WebBrowser Name="wbLogin" LoadCompleted="WbLogin_OnLoadCompleted" Loaded="WbLogin_OnLoaded" Navigated="WbLogin_OnNavigated"/>
+    <WebBrowser Name="wbLogin" Navigated="WbLogin_OnNavigated"/>
 </Window>

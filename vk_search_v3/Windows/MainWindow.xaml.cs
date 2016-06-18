@@ -107,7 +107,11 @@ namespace vk_search_v3.Windows
 
         private void BtnAddPlaylist_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ViewModel.CreatePlaylist("Swaglord");
+            var playlistNameWindow = new PlaylistNameWindow();
+            if (playlistNameWindow.ShowDialog() == true)
+            {
+                ViewModel.CreatePlaylist(playlistNameWindow.PlaylistName);
+            }
         }
 
         private void LvCustomPlaylists_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
