@@ -78,6 +78,8 @@ namespace vk_search_v3.Playback
                 Bass.BASS_ChannelPlay(streamHandle, false);
                 tmrUpdatePosition.Start();
 
+                PlaybackState = PlaybackStates.PLAYING;
+                OnPlaybackStateChanged?.Invoke(this, PlaybackStates.PLAYING);
                 playbackStarting = false;
             }).Start();
         }

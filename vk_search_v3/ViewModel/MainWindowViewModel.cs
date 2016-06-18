@@ -22,6 +22,7 @@ namespace vk_search_v3.ViewModel
 
         private readonly VkAPI vkAPI;
         private readonly Mp3Player player;
+        private readonly IAlbumArtProvider albumArtProvider;
         private PlaybackSources playbackSource;
         private Track currentTrack;
         private Playlist currentlyVisiblePlaylist;
@@ -31,7 +32,6 @@ namespace vk_search_v3.ViewModel
         private bool _isLoading;
         private string elapsedTimeString;
         private string remainingTimeString;
-        private IAlbumArtProvider albumArtProvider;
         private string _currentTrackAlbumImage;
 
         public Track CurrentTrack
