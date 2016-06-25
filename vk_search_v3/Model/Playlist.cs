@@ -1,8 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using vk_search_v3.Base;
 
 namespace vk_search_v3.Model
 {
+    [Serializable]
     public class Playlist : PropertyChangedNotifying
     {
         private long _id;

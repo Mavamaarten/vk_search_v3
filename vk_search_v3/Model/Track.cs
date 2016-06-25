@@ -1,8 +1,10 @@
+using System;
 using vk_search_v3.Base;
 using vk_search_v3.Util;
 
 namespace vk_search_v3.Model
 {
+    [Serializable]
     public class Track : PropertyChangedNotifying
     {
         private long _id;

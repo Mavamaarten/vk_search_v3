@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,6 +48,12 @@ namespace vk_search_v3.Windows
             ViewModel = new MainWindowViewModel();
             ViewModel.OnExceptionOccurred += PlayerOnOnExceptionOccurred;
             ViewModel.OnPlaybackSourceChanged += ViewModel_OnPlaybackSourceChanged;
+            if (BinaryRage.DB.Exists("playlists", AppDomain.CurrentDomain.BaseDirectory))
+            {
+                var savedPlaylists = BinaryRage.DB.Get<IEnumerable<Playlist>>("playlists", AppDomain.CurrentDomain.BaseDirectory);
+                ViewModel.Playlists = new ObservableCollection<Playlist>(savedPlaylists);
+            }
+
             DataContext = ViewModel;
 
             var loginWindow = new LoginWindow();
@@ -233,6 +243,11 @@ namespace vk_search_v3.Windows
         {
             var percentage = e.GetPosition(progressCurrentTrack).X / progressCurrentTrack.ActualWidth;
             ViewModel.SetPosition(percentage);
+        }
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            BinaryRage.DB.Insert("playlists", ViewModel.Playlists.AsEnumerable(), AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 }
