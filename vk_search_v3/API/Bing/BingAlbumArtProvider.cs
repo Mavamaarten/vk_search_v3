@@ -7,7 +7,7 @@ namespace vk_search_v3.API.Bing
 {
     class BingAlbumArtProvider : IAlbumArtProvider
     {
-        private const string image_delimiter = "\" class=\"thumb\" ";
+        private const string image_delimiter = "class=\"thumb\" target=\"_blank\" href=\"";
 
         public async Task<string> GetAlbumArtUrl(string albumName)
         {
@@ -23,8 +23,8 @@ namespace vk_search_v3.API.Bing
         private string ParseImageUrlFromResult(string result)
         {
             if (!result.Contains(image_delimiter)) return null;
-            result = result.Split(new [] {image_delimiter}, StringSplitOptions.None)[0];
-            result = result.Substring(result.LastIndexOf('"') + 1);
+            result = result.Split(new [] {image_delimiter}, StringSplitOptions.None)[1];
+            result = result.Substring(0, result.IndexOf('"'));
             return result;
         }
     }

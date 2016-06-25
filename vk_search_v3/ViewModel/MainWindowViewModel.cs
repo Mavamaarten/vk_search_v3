@@ -236,6 +236,7 @@ namespace vk_search_v3.ViewModel
                 case PlaybackSources.FAVORITES:
                     SelectedPlaylist = null;
                     CurrentlyVisiblePlaylist = Favorites;
+                    LoadFavorites();
                     break;
 
                 case PlaybackSources.QUEUE:
@@ -256,6 +257,24 @@ namespace vk_search_v3.ViewModel
                     t.bitrate = BitrateChecker.CheckBitrate(t);
                 }).Start();
             }
+        }
+
+        private async void LoadFavorites()
+        {
+            IsLoading = true;
+            var favoriteTracks = await vkAPI.GetTracks(null, APIConstants.TRUE, 0, 9999);
+            Favorites.Tracks = new ObservableCollection<Track>(favoriteTracks);
+
+            foreach (var t in CurrentlyVisiblePlaylist.Tracks)
+            {
+                new Thread(() =>
+                {
+                    if (t.bitrate != 0) return;
+                    t.bitrate = BitrateChecker.CheckBitrate(t);
+                }).Start();
+            }
+
+            IsLoading = false;
         }
 
         /// <summary>

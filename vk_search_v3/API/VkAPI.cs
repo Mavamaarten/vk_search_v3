@@ -37,10 +37,10 @@ namespace vk_search_v3.API
 
             HandleAPIErrors(tracksResult.error);
 
-            var resultCount = (long)tracksResult.response.First();
-            if (resultCount == 0) return new List<Track>();
-
-            var tracks = tracksResult.response.Skip(1).Cast<JObject>().Select(o => fixEncoding(o.ToObject<Track>()));
+            var tracks = tracksResult.response
+                .Skip(1)
+                .Cast<JObject>()
+                .Select(o => fixEncoding(o.ToObject<Track>()));
             return tracks;
         }
 
