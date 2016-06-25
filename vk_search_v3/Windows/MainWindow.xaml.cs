@@ -153,23 +153,28 @@ namespace vk_search_v3.Windows
 
         private void AddToPlaylistCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var selectedTrack = (Track)lvTracks.SelectedItem;
-            if (selectedTrack == null) return;
+            if (lvTracks.SelectedItems == null) return;
 
             var selectPlaylistDialog = new SelectPlaylistWindow(viewModel.Playlists) {Owner = this};
             if (selectPlaylistDialog.ShowDialog() == true)
             {
                 var playlist = selectPlaylistDialog.SelectedPlaylist;
-                playlist.Tracks.Add(selectedTrack);
+                foreach (Track track in lvTracks.SelectedItems)
+                {
+                    playlist.Tracks.Add(track);
+                }
             }
         }
 
         private void DownloadCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var selectedTrack = (Track)lvTracks.SelectedItem;
-            if (selectedTrack == null) return;
+            if (lvTracks.SelectedItems == null) return;
 
-            DownloadsWindowViewModel.Tracks.Add(selectedTrack);
+            foreach (Track track in lvTracks.SelectedItems)
+            {
+                DownloadsWindowViewModel.Tracks.Add(track);
+            }
+            
             if (downloadWindow == null || !downloadWindow.IsLoaded)
             {
                 downloadWindow = new DownloadWindow(downloadsWindowViewModel);

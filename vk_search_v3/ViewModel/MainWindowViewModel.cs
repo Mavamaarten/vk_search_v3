@@ -30,8 +30,8 @@ namespace vk_search_v3.ViewModel
         private Tuple<long, long> playbackPosition;
         private Mp3Player.PlaybackStates playbackState;
         private bool _isLoading;
-        private string elapsedTimeString;
-        private string remainingTimeString;
+        private string elapsedTimeString = "00:00";
+        private string remainingTimeString = "-00:00";
         private string _currentTrackAlbumImage;
 
         public Track CurrentTrack

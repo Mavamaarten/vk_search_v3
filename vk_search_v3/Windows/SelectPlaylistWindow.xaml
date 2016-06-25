@@ -13,7 +13,7 @@
     </Window.DataContext>
 
     <Grid>
-        <ListView ItemsSource="{Binding Playlists}" SelectedItem="{Binding SelectedPlaylist}" Margin="10,10,10,42" Background="Black" BorderBrush="{x:Null}" Foreground="White">
+        <ListView ItemsSource="{Binding Playlists}" SelectedItem="{Binding SelectedPlaylist}" MouseDoubleClick="ListPlaylists_OnMouseDoubleClick" Margin="10,10,10,42" Background="Black" BorderBrush="{x:Null}" Foreground="White">
             <ListView.ItemTemplate >
                 <DataTemplate>
                     <TextBlock FontSize="14" Padding="4,4,4,4" TextTrimming="CharacterEllipsis" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding Name}"/>
