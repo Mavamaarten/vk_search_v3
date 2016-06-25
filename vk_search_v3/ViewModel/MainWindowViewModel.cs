@@ -351,6 +351,9 @@ namespace vk_search_v3.ViewModel
             Queue.Tracks.Insert(currentIndex + 1, track);
         }
 
+        /// <summary>
+        /// Plays the next track in the Queue
+        /// </summary>
         public void Next()
         {
             var currentIndex = Queue.Tracks.IndexOf(CurrentTrack);
@@ -361,6 +364,9 @@ namespace vk_search_v3.ViewModel
             }
         }
 
+        /// <summary>
+        /// Plays the previous track in the Queue
+        /// </summary>
         public void Previous()
         {
             var currentIndex = Queue.Tracks.IndexOf(CurrentTrack);
@@ -371,6 +377,9 @@ namespace vk_search_v3.ViewModel
             }
         }
 
+        /// <summary>
+        /// Resumes or pauses the playback
+        /// </summary>
         public void PlayPause()
         {
             player.PlayPause();
@@ -383,6 +392,15 @@ namespace vk_search_v3.ViewModel
         public void AddToQueue(Track track)
         {
             Queue.Tracks.Add(track);
+        }
+
+        /// <summary>
+        /// Sets the current playback position
+        /// </summary>
+        /// <param name="position">The desired playback position, in percent (0 - 1)</param>
+        public void SetPosition(double position)
+        {
+            player.SetPosition(position);
         }
     }
 }

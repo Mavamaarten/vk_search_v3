@@ -224,5 +224,10 @@ namespace vk_search_v3.Windows
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void ProgressCurrentTrack_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var percentage = e.GetPosition(progressCurrentTrack).X / progressCurrentTrack.ActualWidth;
+            ViewModel.SetPosition(percentage);
+        }
     }
 }

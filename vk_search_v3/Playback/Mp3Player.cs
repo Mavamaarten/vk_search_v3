@@ -142,5 +142,18 @@ namespace vk_search_v3.Playback
                     break;
             }
         }
+
+        /// <summary>
+        /// Sets the current playback position
+        /// </summary>
+        /// <param name="position">The desired position, in percent (0 - 1)</param>
+        public void SetPosition(double position)
+        {
+            if (streamHandle != 0)
+            {
+                var channelLength = Bass.BASS_ChannelGetLength(streamHandle, 0);
+                Bass.BASS_ChannelSetPosition(streamHandle, (long)(position * channelLength));
+            }
+        }
     }
 }
