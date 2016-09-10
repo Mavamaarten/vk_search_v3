@@ -12,6 +12,9 @@
                 <MenuItem.Header>
                     <TextBlock Text="Play next" VerticalAlignment="Center"/>
                 </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="/Resources/play.png"/>
+                </MenuItem.Icon>
             </MenuItem>
             <MenuItem Command="Commands:PlayerCommands.AddToQueue" Background="Black" Foreground="White" Height="32">
                 <MenuItem.Header>

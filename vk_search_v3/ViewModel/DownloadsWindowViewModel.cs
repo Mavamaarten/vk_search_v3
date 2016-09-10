@@ -5,9 +5,11 @@ using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Windows;
 using vk_search_v3.Annotations;
 using vk_search_v3.Base;
 using vk_search_v3.Model;
+using vk_search_v3.Util;
 
 namespace vk_search_v3.ViewModel
 {
@@ -140,9 +142,22 @@ namespace vk_search_v3.ViewModel
                 {
                     Downloading = false;
                     Completed = true;
+
+                    if (args.Error != null)
+                    {
+                        MessageBox.Show(args.Error.Message, "An error occurred", MessageBoxButton.OK, MessageBoxImage.Error);
+                        StatusText = "Download failed";
+                        return;
+                    }
+                    if (args.Cancelled)
+                    {
+                        StatusText = "Cancelled";
+                        return;
+                    }
+
                     StatusText = "Completed";
                 };
-                client.DownloadFileAsync(new Uri(track.url), @"C:\Users\Maarten\Desktop\" + track.artist + " - " + track.title + ".mp3");
+                client.DownloadFileAsync(new Uri(track.url), VkSettings.GetInstance().DownloadPath + "\\" + FileUtil.FilterIllegalFilenameCharacters(track.artist + " - " + track.title + ".mp3"));
                 Downloading = true;
                 StatusText = "Starting...";
             }

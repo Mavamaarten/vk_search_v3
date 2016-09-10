@@ -76,6 +76,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -109,7 +110,9 @@
     <Compile Include="API\VkAPI.cs" />
     <Compile Include="Commands\DownloadCommands.cs" />
     <Compile Include="Commands\PlayerCommands.cs" />
+    <Compile Include="Util\FileUtil.cs" />
     <Compile Include="Util\MultiStyleExtension.cs" />
+    <Compile Include="Util\VkSettings.cs" />
     <Compile Include="ViewModel\DownloadsWindowViewModel.cs" />
     <Compile Include="Model\Playlist.cs" />
     <Compile Include="Model\Track.cs" />
