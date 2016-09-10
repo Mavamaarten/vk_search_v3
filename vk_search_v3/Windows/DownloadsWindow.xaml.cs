@@ -26,6 +26,11 @@ namespace vk_search_v3.Windows
             DataContext = ViewModel;
         }
 
+        public void RemoveCompletedTracksFromQueue()
+        {
+            _viewModel.RemoveCompletedTracksFromQueue();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

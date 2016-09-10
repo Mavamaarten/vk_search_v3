@@ -184,11 +184,16 @@ namespace vk_search_v3.Windows
             {
                 DownloadsWindowViewModel.Tracks.Add(track);
             }
-            
+
             if (downloadWindow == null || !downloadWindow.IsLoaded)
             {
                 downloadWindow = new DownloadWindow(downloadsWindowViewModel);
             }
+            if (!downloadWindow.IsVisible)
+            {
+                downloadWindow.RemoveCompletedTracksFromQueue();
+            }
+
             downloadWindow.Show();
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -45,8 +46,21 @@ namespace vk_search_v3.ViewModel
             DownloadAllTracks();
         }
 
+        public void RemoveCompletedTracksFromQueue()
+        {
+            foreach (var downloadThread in _downloadThreads.Where(dt => dt.Completed))
+            {
+                _tracks.Remove(downloadThread.Track);
+            }
+            _downloadThreads = new ObservableCollection<DownloadTrackThread>(_downloadThreads.Where(dt => !dt.Completed));
+            OnPropertyChanged(nameof(DownloadThreads));
+            OnPropertyChanged(nameof(Tracks));
+        }
+
         private void TracksOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
+            if(notifyCollectionChangedEventArgs.NewItems == null) return;
+
             foreach (Track track in notifyCollectionChangedEventArgs.NewItems)
             {
                 var downloadThread = new DownloadTrackThread(track);
